@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %} Signup {% endblock %}
+
+{% block content %}
+<div class="row">
+<div class="col-md-3"></div>
+  <div class="col-md-6  m-2">
+    <h1>Sign up</h1>
+    <form method="post" novalidate>
+        {% csrf_token %}
+    {{form}}
+    <button type="submit" class="btn btn-success">Create an account</button>
+    </br>
+    If already a member,
+    <a class="btn btn-success" href="/login/">Login</a>
+   </form>
+   </div>
+</div>
+
+
+{% endblock %}
