@@ -43,6 +43,7 @@ def log_in(request):
    if request.method == 'POST':
        user=authenticate(request,username=request.POST['username'],
        password=request.POST['password'])
+       print(user)
        if user is not None:
            login(request,user)
            return redirect('calendarapp:calendar')
@@ -56,4 +57,4 @@ def log_in(request):
 
 def user_logout(request):
     logout(request)
-    return redirect('signup')
+    return redirect('login')

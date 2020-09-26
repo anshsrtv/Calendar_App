@@ -41,5 +41,5 @@ class EventFormSerializer(serializers.ModelSerializer):
                 fund_support= fund_support,
                 add_info= add_info
             )
-        except:
-            pass
+        except Exception as e:
+            print(e)

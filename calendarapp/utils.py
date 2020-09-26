@@ -2,7 +2,7 @@
 
 from datetime import datetime, timedelta
 from calendar import HTMLCalendar
-from .models import Event
+from .models import EventForm
 from eventcalendar.helper import get_current_user
 
 class Calendar(HTMLCalendar):
@@ -13,28 +13,35 @@ class Calendar(HTMLCalendar):
 
 	# formats a day as a td
 	# filter events by day
-	def formatday(self, day, events):
-		events_per_day = events.filter(start_time__day=day)
+	def formatday(self, day, eventforms):
+		events_per_day = eventforms.filter(date__day=day)
 		d = ''
 		
 		for event in events_per_day:
 			d += f'<li> {event.get_html_url} </li>'
 		
 		if day != 0:
-			return f"<td><span class='date'>{day}</span><ul> {d} </ul></td>"
-		return '<td></td>'
+			if d=='':
+				return f"<td bgcolor='#00ff00'><span class='date'><a href='/event/{self.year}/{self.month}/{day}/'>{day}</a></span><ul> {d} </ul></td>"
+			elif events_per_day[0].form_status=='APP':
+				return f"<td bgcolor='#ff0000'><span class='date'>{day}</span><ul> <font color='black'>{d} </font></ul></td>"
+			elif events_per_day[0].form_status=='PND':
+				return f"<td bgcolor='yellow'><span class='date'>{day}</span><ul> {d} </ul></td>"
+				
+		else:
+			return '<td></td>'
 
 	# formats a week as a tr 
-	def formatweek(self, theweek, events):
+	def formatweek(self, theweek, eventforms):
 		week = ''
 		for d, weekday in theweek:
-			week += self.formatday(d, events)
+			week += self.formatday(d, eventforms)
 		return f'<tr> {week} </tr>'
 
 	# formats a month as a table
 	# filter events by year and month
 	def formatmonth(self, withyear=True):
-		events = Event.objects.filter(start_time__year=self.year, start_time__month=self.month)
+		events = EventForm.objects.filter(date__year=self.year, date__month=self.month)
 
 		cal = f'<table border="0" cellpadding="0" cellspacing="0" class="calendar">\n'
 		cal += f'{self.formatmonthname(self.year, self.month, withyear=withyear)}\n'

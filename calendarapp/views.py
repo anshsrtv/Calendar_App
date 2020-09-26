@@ -19,7 +19,7 @@ from rest_framework import status
 import datetime
 from .models import *
 from .utils import Calendar
-from .forms import EventForm, AddMemberForm
+# from .forms import EventForm, AddMemberForm
 
 @login_required(login_url='signup')
 def index(request):
@@ -46,7 +46,7 @@ def next_month(d):
 
 class CalendarView(LoginRequiredMixin, generic.ListView):
     login_url = 'login'
-    model = Event
+    model = EventForm
     template_name = 'calendar.html'
 
     def get_context_data(self, **kwargs):
@@ -68,135 +68,135 @@ class CalendarView(LoginRequiredMixin, generic.ListView):
                 context['host']=False
         return context
 
-@login_required(login_url='signup')
-def create_event(request):    
-    form = EventForm(request.POST or None)
-    if request.POST and form.is_valid():
-        title = form.cleaned_data['title']
-        description = form.cleaned_data['description']
-        start_time = form.cleaned_data['start_time']
-        end_time = form.cleaned_data['end_time']
-        Event.objects.get_or_create(
-            user=request.user,
-            title=title,
-            description=description,
-            start_time=start_time,
-            end_time=end_time
-        )
-        return HttpResponseRedirect(reverse('calendarapp:calendar'))
-    return render(request, 'event.html', {'form': form})
+# @login_required(login_url='signup')
+# def create_event(request):    
+#     form = EventForm(request.POST or None)
+#     if request.POST and form.is_valid():
+#         title = form.cleaned_data['title']
+#         description = form.cleaned_data['description']
+#         start_time = form.cleaned_data['start_time']
+#         end_time = form.cleaned_data['end_time']
+#         Event.objects.get_or_create(
+#             user=request.user,
+#             title=title,
+#             description=description,
+#             start_time=start_time,
+#             end_time=end_time
+#         )
+#         return HttpResponseRedirect(reverse('calendarapp:calendar'))
+#     return render(request, 'event.html', {'form': form})
 
-class EventEdit(generic.UpdateView):
-    model = Event
-    fields = ['title', 'description', 'start_time', 'end_time']
-    template_name = 'event.html'
+# class EventEdit(generic.UpdateView):
+#     model = EventForm
+#     fields = ['title', 'description', 'start_time', 'end_time']
+#     template_name = 'event.html'
 
-@login_required(login_url='signup')
-def event_details(request, event_id):
-    event = Event.objects.get(id=event_id)
-    eventmember = EventMember.objects.filter(event=event)
-    context = {
-        'event': event,
-        'eventmember': eventmember,
-    }
-    # event_request=EventMember.objects.get(user=request.user, event=event)
-    try:
-        profile= Profile.objects.get(user=request.user)
-    except:
-        context['host']=False
-    else:
-        if(profile.user_type=='HST'):
-            context['host']=True
-        else:
-            context['host']=False
-        print(profile)
-    print(context['host'])
+# @login_required(login_url='signup')
+# def event_details(request, event_id):
+#     event = Event.objects.get(id=event_id)
+#     eventmember = EventMember.objects.filter(event=event)
+#     context = {
+#         'event': event,
+#         'eventmember': eventmember,
+#     }
+#     # event_request=EventMember.objects.get(user=request.user, event=event)
+#     try:
+#         profile= Profile.objects.get(user=request.user)
+#     except:
+#         context['host']=False
+#     else:
+#         if(profile.user_type=='HST'):
+#             context['host']=True
+#         else:
+#             context['host']=False
+#         print(profile)
+#     print(context['host'])
     
-    return render(request, 'event-details.html', context)
+#     return render(request, 'event-details.html', context)
 
 
-def add_eventmember(request, event_id):
-    forms = AddMemberForm()
-    if request.method == 'POST':
-        forms = AddMemberForm(request.POST)
-        if forms.is_valid():
-            member = EventMember.objects.filter(event=event_id)
-            event = Event.objects.get(id=event_id)
-            user = forms.cleaned_data['user']
-            EventMember.objects.create(
-                event=event,
-                user=user,
-                status='APP',
-                host_id=user.pk
-            )
-            return redirect('calendarapp:calendar')
-    context = {
-        'form': forms
-    }
-    return render(request, 'add_member.html', context)
+# def add_eventmember(request, event_id):
+#     forms = AddMemberForm()
+#     if request.method == 'POST':
+#         forms = AddMemberForm(request.POST)
+#         if forms.is_valid():
+#             member = EventMember.objects.filter(event=event_id)
+#             event = Event.objects.get(id=event_id)
+#             user = forms.cleaned_data['user']
+#             EventMember.objects.create(
+#                 event=event,
+#                 user=user,
+#                 status='APP',
+#                 host_id=user.pk
+#             )
+#             return redirect('calendarapp:calendar')
+#     context = {
+#         'form': forms
+#     }
+#     return render(request, 'add_member.html', context)
 
-class EventMemberDeleteView(generic.DeleteView):
-    model = EventMember
-    template_name = 'event_delete.html'
-    success_url = reverse_lazy('calendarapp:calendar')
+# class EventMemberDeleteView(generic.DeleteView):
+#     model = EventMember
+#     template_name = 'event_delete.html'
+#     success_url = reverse_lazy('calendarapp:calendar')
 
-@login_required(login_url='login')
-def event_member_request(request, event_id):
-    event = Event.objects.get(pk=event_id)
-    context = {
-        'event': event
-    }
-    try: 
-        profile = Profile.objects.get(user=request.user)
-    except:
-        print("NO PROFILE")
-        return render(request, 'event-details.html', context)
-    else: 
-        if profile.user_type=='GST':
-            try:
-                eventmember = EventMember.objects.create(
-                    event=event,
-                    user=request.user,
-                    status='PND',
-                    host_id=event.user.pk
-                )
-            except:
-                eventmember = EventMember.objects.get(user=request.user, event=event)
-                print("Event Member")
-                context['eventmember'] = eventmember
-                return render(request, 'event-details.html', context)
-            else:
-                context['eventmember'] = eventmember
-                print("created")
-                return render(request, 'event-details.html', context)
-        else:
-            context['eventmember.status'] = "Approved"
-            print("HST")
-            return render(request, 'event-details.html', context)
+# @login_required(login_url='login')
+# def event_member_request(request, event_id):
+#     event = Event.objects.get(pk=event_id)
+#     context = {
+#         'event': event
+#     }
+#     try: 
+#         profile = Profile.objects.get(user=request.user)
+#     except:
+#         print("NO PROFILE")
+#         return render(request, 'event-details.html', context)
+#     else: 
+#         if profile.user_type=='GST':
+#             try:
+#                 eventmember = EventMember.objects.create(
+#                     event=event,
+#                     user=request.user,
+#                     status='PND',
+#                     host_id=event.user.pk
+#                 )
+#             except:
+#                 eventmember = EventMember.objects.get(user=request.user, event=event)
+#                 print("Event Member")
+#                 context['eventmember'] = eventmember
+#                 return render(request, 'event-details.html', context)
+#             else:
+#                 context['eventmember'] = eventmember
+#                 print("created")
+#                 return render(request, 'event-details.html', context)
+#         else:
+#             context['eventmember.status'] = "Approved"
+#             print("HST")
+#             return render(request, 'event-details.html', context)
 
-def change_request_status(request, request_id, **kwargs):
-    req = EventMember.objects.get(pk= request_id)
-    print(req.event)
-    event = Event.objects.get(pk=req.event.id)
-    eventmember = EventMember.objects.filter(event=event)
-    context = {
-        'event': event,
-        'eventmember': eventmember,
-    }
-    try: 
-        profile = Profile.objects.get(user=request.user)
-    except:
-        return render(request, 'event-details.html', context)
-    else: 
-        if profile.user_type=='HST':
-            req.status='APP'
-            req.save()
-            context['host']=True
-    return render(request, 'event-details.html', context)
+# def change_request_status(request, request_id, **kwargs):
+#     req = EventMember.objects.get(pk= request_id)
+#     print(req.event)
+#     event = Event.objects.get(pk=req.event.id)
+#     eventmember = EventMember.objects.filter(event=event)
+#     context = {
+#         'event': event,
+#         'eventmember': eventmember,
+#     }
+#     try: 
+#         profile = Profile.objects.get(user=request.user)
+#     except:
+#         return render(request, 'event-details.html', context)
+#     else: 
+#         if profile.user_type=='HST':
+#             req.status='APP'
+#             req.save()
+#             context['host']=True
+#     return render(request, 'event-details.html', context)
 
 # New Stuff
 class EventFormView(APIView):
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     serializer_class = EventFormSerializer
     # template_name = 'index.html'
 
@@ -221,9 +221,11 @@ class EventFormView(APIView):
             serializer = EventFormSerializer(data = self.request.data)
             if serializer.is_valid():
                 serializer.save(date)
+                print(serializer.data)
                 return render(request, 'form_submit.html')
             else:
                 data = serializer.errors
+                print(data)
                 return render(request, '500.html')
         # else:
         #     return Response({"detail": "You are not authorised to create this."}, status.HTTP_403_FORBIDDEN)

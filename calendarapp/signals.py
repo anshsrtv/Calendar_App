@@ -26,17 +26,27 @@ def mail_user(sender, created, instance, **kwargs):
             print("Email Not Sent")
     else: 
         pass
-
-@receiver(pre_save, sender=EventForm)
-def mail_status(sender, created, instance, **kwargs):
-    # print(instance.email+'-'+str(instance.pk))
-    if created==False:
+    if instance.form_status=='RJD':
         try:
             form = EventForm.objects.get(pk=instance.pk)
         except:
             print("Form not Found")
         else:
-            if form.form_status!=instance.form_status and instance.form_status=='APP':
+            form.delete()
+    else: 
+        pass
+
+@receiver(pre_save, sender=EventForm)
+def mail_status(sender, instance, **kwargs):
+    # print(instance.email+'-'+str(instance.pk))
+    if instance.form_status=='APP':
+        try:
+            form = EventForm.objects.get(pk=instance.pk)
+        except:
+            print("Form not Found")
+        else:
+            # print(form.values()[0]['form_status'])
+            if form.form_status!=instance.form_status:
                 try:
                     send_mail(
                         'Approval for event on {} by IFTOMM'.format(instance.date),
@@ -49,9 +59,9 @@ def mail_status(sender, created, instance, **kwargs):
                     print("Email Not Sent")
             else: 
                 pass
-    else: 
+    else:
         pass
-
+            
 
         
     

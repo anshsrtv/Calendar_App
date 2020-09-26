@@ -1,4 +1,13 @@
 //<script type="text/javascript">
+function validURL(str) {
+  var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+    '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+    '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+    '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+  return !!pattern.test(str);
+}
 function validate()
 { 
    if( document.registration.name.value == "" )
@@ -25,12 +34,13 @@ function validate()
      return false;
  }
 
- if( document.registration.link.value == "" )
+ if( document.registration.link.value == "" || !validURL(document.registration.link.value) )
    {
-     alert( "Please provide your Link!" );
+     alert( "Please provide valid Link!" );
      document.registration.link.focus() ;
      return false;
    }
+   
 
 if( document.registration.org_name.value == "" )
    {

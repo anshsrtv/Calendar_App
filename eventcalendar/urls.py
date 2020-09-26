@@ -10,7 +10,7 @@ urlpatterns = [
     path('signup/', signup, name='signup'),
     path('login/', log_in, name='login'),
     path('logout/', user_logout, name='logout'),
-    path('event/<int:event_id>/request/', views.event_member_request, name='event_member_request'),
-    path('request/<int:request_id>/', views.change_request_status, name='change_request_status'),
+    # path('event/<int:event_id>/request/', views.event_member_request, name='event_member_request'),
+    # path('request/<int:request_id>/', views.change_request_status, name='change_request_status'),
     path('', include('calendarapp.urls')),
 ]
