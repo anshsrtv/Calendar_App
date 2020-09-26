@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            Scheduler
+        </title>
+        {% load static %}
+        <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}" />
+        <script type="text/javascript" src="{% static 'validate.js'%}"></script>
+    </head>
+
+ <body>
+     <div class="register"><h1>Registration</h1></div>
+    <div class="main">
+        <form action="/event/{{year}}/{{month}}/{{day}}/" method="POST" id="registration" name="registration" onsubmit="return(validate());">
+            {% csrf_token %}
+            <div >
+                <h2 class="name" id="name">Name <span style="color:rgb(240, 45, 45);font-weight:bold;font-size:20px">*</span></h2>
+                <input class="txt_name" type="text" name="name"><br>
+                <!-- <label class="firstlabel1">first name</label>
+                <input class="lastname" type="text" name="last_name"><br>
+                <label class="lastlabel1">last name</label> -->
+            </div>
+            <h2 class="name">Address</h2>
+            <input class="address" type="text" id="address" name="address">
+
+            <h2 class="name">Email Id</h2>
+            <input class="email" type="text"  id="email" name="email">
+
+            <h2 class="name">Link</h2>
+            <input class="link" type="text" id="link" name="link">
+                <br>
+            <label class="organiser" >Conference Organized By:</label>
+            <br>
+            <br>
+            <br>
+            <h2 class="name">Organisation Name</h2>
+            <input class="org_name" type="text" id="mem_org" name="mem_org" required>
+            <br>
+            <label class="name" >Supported By:</label>
+            <br>
+            <input class="supporter" type="text" id="tc_pc" name="tc_pc" required>
+
+            <h2  class="approval" id="approval">Approved from the Chair of the Member Organization ?</h2>
+             <label class="radio">
+                <input class="radio-two" type="radio"  name="mo_approval" value="true" >
+                <span  class="checkmark"></span> Yes
+            </label>
+            <label class="radio">
+                <input class="radio-two" type="radio"  name="mo_approval" value="false"  checked="checked">
+                <span  class="checkmark"></span>No
+            </label>
+
+            <h2  class="approval" id="approval">Approved from relevant TC/PC Chair ?</h2>
+             <label class="radio">
+                <input class="radio-two" type="radio"  name="tc_pc_approval" value="true" >
+                <span  class="checkmark"></span> Yes
+            </label>
+            <label class="radio">
+                <input class="radio-two" type="radio"  name="tc_pc_approval" value="false" checked="checked">
+                <span  class="checkmark"></span>No
+            </label>
+
+            <h2  class="approval" id="approval">Are you looking for IFToMM funding support ?</h2>
+             <label class="radio">
+                <input class="radio-two" type="radio"  name="fund_support" value="true">
+                <span  class="checkmark"></span> Yes
+            </label>
+            <label class="radio">
+                <input class="radio-two" type="radio" name="fund_support" value="false" checked="checked">
+                <span  class="checkmark"></span>No
+            </label>
+            <br>
+            <br>
+
+            <h2  class="approval" id="info">Additional information</h2>
+            <input class="info" type="text" name="add_info">
+
+
+            <button type="submit" form="registration" value="Submit">Apply for booking</button>
+
+
+
+        </form>
+
+    </div>
+    <div>
+        <div class="footer"><h1>*********</h1></div>
+        <br>
+    </div>
+
+
+
+    </body>   
+</html>

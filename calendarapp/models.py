@@ -50,3 +50,26 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.username+'-'+self.user_type
+
+class EventForm(models.Model):
+    form_status_choices = [
+        ['APP','Approved'],
+        ['PND','Pending'],
+        ['RJD','Rejected']
+    ]
+
+    name = models.CharField(max_length=500)
+    address = models.TextField()
+    email = models.EmailField()
+    link = models.URLField()
+    date = models.DateField(unique=True)
+    mem_org = models.CharField(max_length=500)
+    tc_pc = models.CharField(max_length=500)
+    mo_approval = models.BooleanField(default=False)
+    tc_pc_approval = models.BooleanField(default=False)
+    fund_support = models.BooleanField()
+    add_info = models.TextField(null=True, blank=True)
+    form_status = models.CharField(max_length=100, choices = form_status_choices, default='PND')
+
+    def __str__(self):
+        return self.name+'-'+str(self.date)

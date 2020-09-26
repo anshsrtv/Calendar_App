@@ -1,6 +1,6 @@
 # cal/views.py
 
-from datetime import datetime, date
+from datetime import date
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views import generic
@@ -11,8 +11,12 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-
-
+from .serializers import EventFormSerializer
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework import status
+import datetime
 from .models import *
 from .utils import Calendar
 from .forms import EventForm, AddMemberForm
@@ -25,7 +29,7 @@ def get_date(req_day):
     if req_day:
         year, month = (int(x) for x in req_day.split('-'))
         return date(year, month, day=1)
-    return datetime.today()
+    return datetime.datetime.today()
 
 def prev_month(d):
     first = d.replace(day=1)
@@ -189,3 +193,37 @@ def change_request_status(request, request_id, **kwargs):
             req.save()
             context['host']=True
     return render(request, 'event-details.html', context)
+
+# New Stuff
+class EventFormView(APIView):
+    # permission_classes = [IsAuthenticated]
+    serializer_class = EventFormSerializer
+    # template_name = 'index.html'
+
+    def get(self, request, **kwargs):
+        return render(request, 'index.html', kwargs)
+
+    def post(self, request, **kwargs):
+        # try: 
+        #     profile = Profile.objects.get(user=self.request.user)
+        # except:
+        #     return Response(
+        #         {"detail":"You are not a member of this organisation"},
+        #         status.HTTP_401_UNAUTHORIZED
+        #     )
+        # else: 
+        #     if profile.user_type=='HST':
+        try: 
+            date = datetime.date(int(kwargs['year']), int(kwargs['month']), int(kwargs['day']))
+        except:
+            return Response({"Not a Valid Date"}, status.HTTP_400_BAD_REQUEST)
+        else:
+            serializer = EventFormSerializer(data = self.request.data)
+            if serializer.is_valid():
+                serializer.save(date)
+                return render(request, 'form_submit.html')
+            else:
+                data = serializer.errors
+                return render(request, '500.html')
+        # else:
+        #     return Response({"detail": "You are not authorised to create this."}, status.HTTP_403_FORBIDDEN)
