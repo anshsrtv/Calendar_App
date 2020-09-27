@@ -50,7 +50,7 @@ def mail_status(sender, instance, **kwargs):
                 try:
                     send_mail(
                         'Approval for event on {} by IFTOMM'.format(instance.date),
-                        'Your application has been approved by IFTOMM. We will forward to your event',
+                        'Your application has been approved by IFTOMM. We look forward to your event',
                         'naughty.ansh007@gmail.com',
                         [instance.email],
                         fail_silently=False,

@@ -1,6 +1,24 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<head>
+{% load static %}
+<!--===============================================================================================-->	
+<!-- <link rel="icon" type="image/png" href=""/> -->
+<link rel="icon" type="image/png" href="{% static 'images/icons/favicon.ico' %}" />
+
+<!--===============================================================================================-->
+<!-- <link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css"> -->
+<link rel="stylesheet" type="text/css" href="{% static 'fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}" />
+<!--===============================================================================================-->
+
+<!--===============================================================================================-->
+<!-- <link rel="stylesheet" type="text/css" href="css/util.css"> -->
+<link rel="stylesheet" type="text/css" href="{% static 'css/util.css' %}" />
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}" />
+<!--===============================================================================================-->
+</head>
 <div class="clearfix">
     <span class="left m-2" style="font-size: 20px;">Welcome {{ request.user }}</span>
     <a class="btn btn-info right" href="{% url 'logout' %}"> Logout </a>
@@ -8,7 +26,7 @@
     <a class="btn btn-info right mr-2" href="{% url 'calendarapp:calendar' %}?{{ prev_month }}"> << Previous Month </a>
    
 </div>
-<div style="color: rgb(0, 0, 0);">
+<div class="container-login100" style="color: rgb(0, 0, 0);">
     {{ calendar }}
 </div>
 {% endblock %}
