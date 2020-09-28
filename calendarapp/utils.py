@@ -22,14 +22,14 @@ class Calendar(HTMLCalendar):
 		
 		if day != 0:
 			if d=='':
-				return f"<td bgcolor='#00ff00'><span class='date'><a href='/event/{self.year}/{self.month}/{day}/'>{day}</a></span><ul> {d} </ul></td>"
+				return f"<td bgcolor='#27ae60'><span class='date'><a href='/event/{self.year}/{self.month}/{day}/'>{day}</a></span><ul><font color='black'> {d} </font></ul></td>"
 			elif events_per_day[0].form_status=='APP':
-				return f"<td bgcolor='#ff0000'><span class='date'>{day}</span><ul> <font color='black'>{d} </font></ul></td>"
+				return f"<td bgcolor='#DC143C'><span class='date'>{day}</span><ul> <font color='black'>{d} </font></ul></td>"
 			elif events_per_day[0].form_status=='PND':
-				return f"<td bgcolor='yellow'><span class='date'>{day}</span><ul> {d} </ul></td>"
+				return f"<td bgcolor='#fada5e'><span class='date'>{day}</span><ul><font color='black'> {d} </font></ul></td>"
 				
 		else:
-			return '<td></td>'
+			return "<td bgcolor='#d0d3d4'></td>"
 
 	# formats a week as a tr 
 	def formatweek(self, theweek, eventforms):

@@ -1,5 +1,5 @@
 .calendar {
-    width: 98%;
+    width: 60%;
     margin: auto;
     font-size: 13px;
   }
@@ -22,6 +22,7 @@
   
   .month {
     font-size: 25px;
+    background-color: #db7a7a;
   }
   
   .date {
@@ -40,15 +41,29 @@
   .left {
     float: left;
   }
-  
+
+  .left_side{
+    float: left;
+    margin-left: 120px;
+  }
+
   .right {
     float: right;
   }
   
+  .right_side{
+    float: right;
+    margin-right: 230px;
+  }
+
+  .right_shift{
+    float: right;
+    margin-right: 60px;
+  }
   .btn {
     outline: none;
     color: black;
-    background-color: transparent;
+    background-color: #188ede;
     box-shadow: 0 0 0 0;
   }
   
@@ -67,4 +82,7 @@
     background: none;
     padding: 5px;
     width: 100%;
+  }
+  .mon,.tue,.wed,.thu,.fri,.sat,.sun{
+    background-color: #db8d7a;
   }
