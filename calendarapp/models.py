@@ -81,4 +81,4 @@ class EventForm(models.Model):
     @property   
     def get_html_url(self):
         url = self.link
-        return f'<a href="{url}" style="color:#000000;"><font size=2>{self.name}</font></a>'
+        return f'<a href="{url}" style="color:#000000;"> {self.name} </a>'
