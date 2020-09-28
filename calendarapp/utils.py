@@ -1,6 +1,6 @@
 # calendarapp/utils.py
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from calendar import HTMLCalendar
 from .models import EventForm
 from eventcalendar.helper import get_current_user
@@ -19,7 +19,8 @@ class Calendar(HTMLCalendar):
 		
 		for event in events_per_day:
 			d += f'<li> {event.get_html_url} </li>'
-		
+		# today = date.today()
+		#  and day>today.day and self.month>=today.month and self.year>=today.year
 		if day != 0:
 			if d=='':
 				return f"<td bgcolor='#27ae60'><span class='date'><a href='/event/{self.year}/{self.month}/{day}/'>{day}</a></span><ul><font color='black'> {d} </font></ul></td>"
