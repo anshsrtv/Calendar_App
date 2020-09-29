@@ -88,6 +88,10 @@
       border: none;
   }
   
+  .id_username{
+    left: 500px;
+    top: 20px;
+  }
   textarea {
     outline: none;
     border: none;
