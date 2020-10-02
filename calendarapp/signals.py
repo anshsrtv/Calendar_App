@@ -1,7 +1,8 @@
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
-from .models import EventForm
+from .models import EventForm, ContinuedEvent
 from django.core.mail import send_mail
+from datetime import timedelta
 
 @receiver(post_save, sender=EventForm)
 def mail_user(sender, created, instance, **kwargs):
@@ -12,8 +13,16 @@ def mail_user(sender, created, instance, **kwargs):
     #         [instance.email]
     #     )
     # print(instance.email)
-    if created==True:
+    
+    
 
+    if created==True:
+        for i in range(1, instance.days):
+            days = timedelta(days=i)
+            ContinuedEvent.objects.create(
+                event=instance,
+                date=instance.date + days
+            )
         try:
             send_mail(
             'Acknowledgement from IFTOMM',
@@ -38,7 +47,6 @@ def mail_user(sender, created, instance, **kwargs):
 
 @receiver(pre_save, sender=EventForm)
 def mail_status(sender, instance, **kwargs):
-    # print(instance.email+'-'+str(instance.pk))
     if instance.form_status=='APP':
         try:
             form = EventForm.objects.get(pk=instance.pk)

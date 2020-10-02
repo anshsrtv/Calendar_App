@@ -71,6 +71,7 @@ class EventForm(models.Model):
     fund_support = models.BooleanField()
     add_info = models.TextField(null=True, blank=True)
     form_status = models.CharField(max_length=100, choices = form_status_choices, default='PND')
+    days = models.IntegerField(default=1)
 
     def __str__(self):
         return self.name+'-'+str(self.date)
@@ -82,3 +83,18 @@ class EventForm(models.Model):
     def get_html_url(self):
         url = self.link
         return f'<a href="{url}" style="color:#000000;"><font size=2>{self.name}</font></a>'
+
+class ContinuedEvent(models.Model):
+    event = models.ForeignKey(EventForm, on_delete= models.CASCADE)
+    date = models.DateField(unique=True)
+
+    def __str__(self):
+        return self.event.name+'-'+str(self.date)
+
+    def get_absolute_url(self):
+        return self.event.link
+
+    @property   
+    def get_html_url(self):
+        url = self.event.link
+        return f'<a href="{url}" style="color:#000000;"><font size=2>{self.event.name}</font></a>'

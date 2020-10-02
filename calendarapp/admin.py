@@ -1,5 +1,5 @@
 from django.contrib import admin
-from calendarapp.models import Profile, EventForm
+from calendarapp.models import Profile, EventForm, ContinuedEvent
 
 # class EventMemberAdmin(admin.ModelAdmin):
 #     model = EventMember
@@ -9,3 +9,4 @@ from calendarapp.models import Profile, EventForm
 # admin.site.register(EventMember, EventMemberAdmin)
 admin.site.register(Profile)
 admin.site.register(EventForm)
+admin.site.register(ContinuedEvent)
