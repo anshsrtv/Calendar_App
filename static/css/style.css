@@ -43,9 +43,8 @@
   }
 
   .left_side{
-    position: relative;
     float: left;
-    margin-left: 260px;
+    margin-left: 120px;
   }
 
   .right {
@@ -53,9 +52,8 @@
   }
   
   .right_side{
-    position: relative;
-    float: left;
-    margin-left: 435px;
+    float: right;
+    margin-right: 230px;
   }
 
   .right_shift{

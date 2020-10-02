@@ -90,11 +90,3 @@ class ContinuedEvent(models.Model):
 
     def __str__(self):
         return self.event.name+'-'+str(self.date)
-
-    def get_absolute_url(self):
-        return self.event.link
-
-    @property   
-    def get_html_url(self):
-        url = self.event.link
-        return f'<a href="{url}" style="color:#000000;"><font size=2>{self.event.name}</font></a>'
