@@ -14,11 +14,13 @@ class EventFormSerializer(serializers.ModelSerializer):
             'mo_approval', 
             'tc_pc_approval', 
             'fund_support', 
-            'add_info'
+            'add_info',
+            'days'
         ] 
     def save(self, date):
         name = self.validated_data['name']
         link = self.validated_data['link']
+        days = self.validated_data['days']
         address = self.validated_data['address']
         email = self.validated_data['email']
         mem_org = self.validated_data['mem_org']
@@ -39,7 +41,8 @@ class EventFormSerializer(serializers.ModelSerializer):
                 mo_approval= mo_approval,
                 tc_pc_approval= tc_pc_approval,
                 fund_support= fund_support,
-                add_info= add_info
+                add_info= add_info,
+                days = days
             )
         except Exception as e:
             print(e)
