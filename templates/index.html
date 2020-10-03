@@ -47,8 +47,9 @@
                      <!--Form-->
 
                     <form method="POST" action="/event/{{year}}/{{month}}/{{day}}/" id="registration" name="registration" onsubmit="return(validate());">
-                        <!-- {% csrf_token %} -->
+                        {% csrf_token %}
                          <!--Name-->
+                        
 
                         <div class="form-row m-b-55">
                             <div class="name">Name<span style="color:rgb(240, 45, 45);font-weight:bold;font-size:20px">*</span></div>
