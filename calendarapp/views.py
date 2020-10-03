@@ -218,6 +218,18 @@ class EventFormView(APIView):
         except:
             return Response({"Not a Valid Date"}, status.HTTP_400_BAD_REQUEST)
         else:
+            for i in range(1, int(request.data['days'])):
+                days = timedelta(days=i)
+                # try:
+                conts=ContinuedEvent.objects.filter(
+                    date=date + days
+                ) 
+                events = EventForm.objects.filter(
+                    date=date + days
+                )
+                if events or conts:
+                    return render(request, 'error.html', {"header":"400 BAD REQUEST", "errors": f"Conflicting Dates with {events[0]}. Please conduct your event on free dates"})
+
             serializer = EventFormSerializer(data = self.request.data)
             if serializer.is_valid():
                 serializer.save(date)
@@ -226,6 +238,6 @@ class EventFormView(APIView):
             else:
                 data = serializer.errors
                 print(data)
-                return render(request, '500.html')
+                return render(request, 'error.html', {"header":"400 BAD REQUEST","errors": data})
         # else:
         #     return Response({"detail": "You are not authorised to create this."}, status.HTTP_403_FORBIDDEN)

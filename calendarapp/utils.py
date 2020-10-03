@@ -25,7 +25,7 @@ class Calendar(HTMLCalendar):
 			d += f'<li> {cont.event.get_html_url} </li>'
 		
 		if day != 0:
-			if d=='':
+			if d=='' and date(self.year, self.month, day)>=date.today():
 				return f"<td bgcolor='#27ae60'><span class='date'><a href='/event/{self.year}/{self.month}/{day}/'>{day}</a></span><ul><font color='black'> {d} </font></ul></td>"
 			elif event and event.form_status=='APP':
 				return f"<td bgcolor='#DC143C'><span class='date'>{day}</span><ul> <font color='black'>{d} </font></ul></td>"
@@ -35,6 +35,8 @@ class Calendar(HTMLCalendar):
 				return f"<td bgcolor='#DC143C'><span class='date'>{day}</span><ul> <font color='black'>{d} </font></ul></td>"
 			elif cont and cont.event.form_status=='PND':
 				return f"<td bgcolor='#fada5e'><span class='date'>{day}</span><ul><font color='black'> {d} </font></ul></td>"
+			elif d=='':
+				return f"<td bgcolor='#27ae60'><span class='date'>{day}</span><ul><font color='black'> {d} </font></ul></td>"
 
 				
 		else:
